@@ -13,3 +13,19 @@ Ground Truth RMSE between true and noisy measurements: 7.4158
 Ground Truth RMSE between true and estimated coordinates: 187.4921
 Finetuned RMSE between true and noisy measurements: 7.4158
 Finetuned RMSE between true and estimated coordinates: 5.1512
+
+Best Finetuned RMSE: 4.9627
+Best Finetuned Q matrix:
+    0.0100         0         0         0
+         0    0.0100         0         0
+         0         0    0.0100         0
+         0         0         0    0.0100
+
+Best Finetuned R matrix:
+    0.1000         0
+         0    0.1000
+
+Ground Truth RMSE between true and noisy measurements : 7.4158, Standard Deviation: 2.5727
+Ground Truth RMSE between true and estimated coordinates : 187.4921, Standard Deviation: 83.0663
+Finetuned RMSE between true and noisy measurements : 7.4158, Standard Deviation: 2.5727
+Finetuned RMSE between true and estimated coordinates : 5.1512, Standard Deviation: 2.1713
