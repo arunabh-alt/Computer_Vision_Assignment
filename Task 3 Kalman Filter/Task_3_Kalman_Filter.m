@@ -101,12 +101,16 @@ disp(best_R);
 rmse_noisy = sqrt(mean((x_true - na_noisy).^2 + (y_true - nb_noisy).^2));
 rmse_estimated = sqrt(mean((x_true - x_est_traj).^2 + (y_true - y_est_traj).^2));
 
+std_noisy_baseline = std(sqrt((x_true - na_noisy).^2 + (y_true - nb_noisy).^2));
+std_estimated_baseline = std(sqrt((x_true - x_est_traj_baseline).^2 + (y_true - y_est_traj_baseline).^2));
+std_noisy = std(sqrt((x_true - na_noisy).^2 + (y_true - nb_noisy).^2));
+std_estimated = std(sqrt((x_true - x_est_traj).^2 + (y_true - y_est_traj).^2));
 
-fprintf('Ground Truth RMSE between true and noisy measurements: %.4f\n', rmse_noisy_baseline);
-fprintf('Ground Truth RMSE between true and estimated coordinates: %.4f\n', rmse_estimated_baseline);
-fprintf('Finetuned RMSE between true and noisy measurements: %.4f\n', rmse_noisy);
-fprintf('Finetuned RMSE between true and estimated coordinates: %.4f\n', rmse_estimated);
-
+% Print RMSE and standard deviation
+fprintf('Ground Truth RMSE between true and noisy measurements : %.4f, Standard Deviation: %.4f\n', rmse_noisy_baseline, std_noisy_baseline);
+fprintf('Ground Truth RMSE between true and estimated coordinates : %.4f, Standard Deviation: %.4f\n', rmse_estimated_baseline, std_estimated_baseline);
+fprintf('Finetuned RMSE between true and noisy measurements : %.4f, Standard Deviation: %.4f\n', rmse_noisy, std_noisy);
+fprintf('Finetuned RMSE between true and estimated coordinates : %.4f, Standard Deviation: %.4f\n', rmse_estimated, std_estimated);
 figure;
 subplot(2,1,1);
 plot(x_true, y_true, 'b', 'LineWidth', 2); hold on;
