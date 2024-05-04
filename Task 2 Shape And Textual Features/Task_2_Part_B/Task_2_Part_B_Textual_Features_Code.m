@@ -329,7 +329,7 @@ sgtitle('Green Channel Ball Correlation');
 % Figure 6: Blue Channel
 figure;
 subplot(2,3,1);
-histogram(blue_asm_all,num_bins2,'FaceColor', [1 1 0]);
+histogram(blue_asm_all,num_bins,'FaceColor', [1 1 0]);
 title('Histogram of blue\_yellow\_asm');
 xlabel('ASM');
 ylabel('Frequency');
