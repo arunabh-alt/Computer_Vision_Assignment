@@ -263,7 +263,7 @@ ylabel('Frequency');
 title('Eccentricity Features Distribution For All Balls');
 legend('Yellow Ball', 'White Ball', 'Orange Ball');
 hold off;
-
+sgtitle('All Shape Features for All Ball Patches');
 function binEdges = getBinNumber(val_1, val_2, val_3)
     % Combine all values into one array
     allValues = [val_1(:); val_2(:); val_3(:)];
