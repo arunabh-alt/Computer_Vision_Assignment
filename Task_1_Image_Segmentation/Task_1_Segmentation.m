@@ -41,9 +41,7 @@ for i = 1:numel(fileList)
     BW2 = imdilate(sliderBW2, se_ellipse);
     se1= strel('square',10);
     BW2 = imopen(BW2,se1);
-    % BW2 = bwareaopen(imfill(BW2,'holes'),22000);
-    % BW2 = bwpropfilt(BW2,'Area',[1000, 3667]);
-    % BW2 = bwpropfilt(BW2,'Solidity',[0.5, 1]);
+   
     se3 =strel('diamond',8);
     BW2 = imdilate(BW2, se3);
   
