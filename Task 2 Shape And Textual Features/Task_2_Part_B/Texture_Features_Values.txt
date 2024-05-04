@@ -1,0 +1,27 @@
+Red Channel Contrast:
+Mean Values:
+Yellow Ball: 5.8597
+White Ball: 0.75889
+Orange Ball: 0.11612
+Range Values:
+Yellow Ball: 9.1622
+White Ball: 1.946
+Orange Ball: 0.20066
+Green Channel Correlation:
+Mean Values:
+Yellow Ball: 0.97125
+White Ball: 0.88523
+Orange Ball: 0.96211
+Range Values:
+Yellow Ball: 0.10129
+White Ball: 0.25243
+Orange Ball: 0.10097
+Blue Channel ASM:
+Mean Values:
+Yellow Ball: 0.20043
+White Ball: 0.29113
+Orange Ball: 0.23043
+Range Values:
+Yellow Ball: 0.25866
+White Ball: 0.38031
+Orange Ball: 0.33471
