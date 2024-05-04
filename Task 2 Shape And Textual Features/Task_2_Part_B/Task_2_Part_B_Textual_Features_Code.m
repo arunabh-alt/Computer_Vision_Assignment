@@ -446,9 +446,9 @@ disp(['Orange Ball: ', num2str(mean(red_orange_contrast_all_range))]);
 
 disp('Green Channel Correlation:');
 disp('Mean Values:');
-disp(['Yellow Ball: ', num2str(nanmean(green_correlation_all))]);
-disp(['White Ball: ', num2str(nanmean(green_white_correlation_all))]);
-disp(['Orange Ball: ', num2str(nanmean(green_orange_correlation_all))]);
+disp(['Yellow Ball: ', num2str(nanmean(green_correlation_all))]); % Warning (nanmean function maynot be work in all MATLAB versions)
+disp(['White Ball: ', num2str(nanmean(green_white_correlation_all))]); % Warning (nanmean function maynot be work in all MATLAB versions)
+disp(['Orange Ball: ', num2str(nanmean(green_orange_correlation_all))]);% Warning (nanmean function maynot be work in all MATLAB versions)
 disp('Range Values:');
 disp(['Yellow Ball: ', num2str(mean(green_correlation_all_range))]);
 disp(['White Ball: ', num2str(mean(green_white_correlation_all_range))]);
