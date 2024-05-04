@@ -1,0 +1,16 @@
+Best 5 Dice Scores:
+Image 55: 0.9095
+Image 54: 0.8801
+Image 27: 0.8798
+Image 26: 0.8792
+Image 46: 0.8786
+
+Worst 5 Dice Scores:
+Image 16: 0.5569
+Image 15: 0.5840
+Image 18: 0.5995
+Image 14: 0.6187
+Image 17: 0.6191
+
+Mean Dice Score: 0.8049
+Standard Deviation of Dice Scores: 0.0861
