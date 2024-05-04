@@ -72,21 +72,37 @@ for i = 1:numel(worstIndices)
 end
 
 % Display the best and worst 5 segmented images
+% Display the best and worst 5 segmented images
 figure;
-subplot(2, 5, 1);
+
+% Display best segmented images with corresponding ground truth masks
 for i = 1:5
     % Display best segmented images
-    subplot(2, 5, i);
+    subplot(4, 5, i);
     imshow(fullfile(predictedFolder, diceAndNames{bestIndices(i), 2}));
     title(['Best Dice Score: ', num2str(sortedDiceScores(i))]);
+    
+    % Load and display corresponding ground truth mask
+    subplot(4, 5, i+5);
+    groundTruthName = strrep(diceAndNames{bestIndices(i), 2}, '_segmented.png', '_GT.png');
+    imshow(fullfile(groundTruthFolder, groundTruthName));
+    title('Ground Truth Mask');
 end
+
+% Display worst segmented images with corresponding ground truth masks
 for i = 1:5
     % Display worst segmented images
-    subplot(2, 5, i+5);
+    subplot(4, 5, i+10);
     imshow(fullfile(predictedFolder, diceAndNames{worstIndices(i), 2}));
     title(['Worst Dice Score: ', num2str(sortedDiceScores(end-i+1))]);
+    
+    % Load and display corresponding ground truth mask
+    subplot(4, 5, i+15);
+    groundTruthName = strrep(diceAndNames{worstIndices(i), 2}, '_segmented.png', '_GT.png');
+    imshow(fullfile(groundTruthFolder, groundTruthName));
+    title('Ground Truth Mask');
 end
-sgtitle('Top Five Best and Worst Dice Score Images');
+sgtitle('Top Five Best and Worst Dice Score Images with Ground Truth Masks');
 figure;
 bar(imageNumbers, diceScores);
 xlabel('Image Number');
