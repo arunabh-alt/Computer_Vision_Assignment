@@ -83,7 +83,7 @@ Task Result -
       0.1000         0
              0    0.1000
 
-- Baseline Filter RMSE between true and noisy measurements : 7.4158, Standard Deviation: 2.5727
-- Baseline Filter RMSE between true and estimated coordinates : 187.4921, Standard Deviation: 83.0663
-- Finetuned Filter RMSE between true and noisy measurements : 7.4158, Standard Deviation: 2.5727
-- Finetuned Filter RMSE between true and estimated coordinates : 5.1512, Standard Deviation: 2.1713
+- Baseline Filter RMSE between true and estimated coordinates Mean : 168.4126, Standard Deviation: 83.0663
+- Finetuned Filter RMSE between true and estimated coordinates Mean : 4.6792, Standard Deviation: 2.1713
+- Baseline Kalman Filter Standard Deviation Error in X direction Error: 82.7309, Y Direction Error : 11.0045
+- Fine Tuned Kalman Filter Standard Deviation Error in X direction Error: 3.6485, Y Direction Error : 3.0581
