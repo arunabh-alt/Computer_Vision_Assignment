@@ -10,6 +10,8 @@ Best Finetuned R matrix:
     0.1000         0
          0    0.1000
 
+Baseline Filter RMSE in (Noisy Coordinate) between true and estimated coordinates Mean : 6.9628, Standard Deviation: 2.5727
+Finetuned Filter RMSE in (Noisy Coordinate) between true and estimated coordinates Mean : 6.9628, Standard Deviation: 2.5727
 Baseline Filter RMSE between true and estimated coordinates Mean : 168.4126, Standard Deviation: 83.0663
 Finetuned Filter RMSE between true and estimated coordinates Mean : 4.6792, Standard Deviation: 2.1713
 Baseline Kalman Filter Standard Deviation Error in X direction Error: 82.7309, Y Direction Error : 11.0045
