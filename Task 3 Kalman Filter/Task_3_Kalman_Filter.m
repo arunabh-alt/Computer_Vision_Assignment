@@ -121,37 +121,49 @@ fprintf('Baseline Kalman Filter Standard Deviation Error in X direction Error: %
 fprintf('Fine Tuned Kalman Filter Standard Deviation Error in X direction Error: %.4f, Y Direction Error : %.4f\n', std_error_x, std_error_y);
 
 
+% Plotting
 figure;
-subplot(2,1,1);
+
+% Subplot 1 - Baseline Trajectory
+subplot(2, 2, 1);
 plot(x_true, y_true, 'b', 'LineWidth', 2); hold on;
 plot(na_noisy, nb_noisy, 'r--', 'LineWidth', 1.5);
 plot(x_est_traj_baseline, y_est_traj_baseline, 'g', 'LineWidth', 1.5);
 xlabel('x');
 ylabel('y');
 legend('True trajectory', 'Noisy measurements', 'Estimated trajectory');
-title('Ground Truth Trajectories of True, Noisy, and Estimated Coordinates');
+title('Baseline Trajectories');
 
-subplot(2,1,2);
+% Subplot 2 - Fine-tuned Trajectory
+subplot(2, 2, 2);
 plot(x_true, y_true, 'b', 'LineWidth', 2); hold on;
 plot(na_noisy, nb_noisy, 'r--', 'LineWidth', 1.5);
 plot(x_est_traj, y_est_traj, 'g', 'LineWidth', 1.5);
 xlabel('x');
 ylabel('y');
 legend('True trajectory', 'Noisy measurements', 'Estimated trajectory');
-title('Finetuned Trajectories of True, Noisy, and Estimated Coordinates');
+title('Fine-tuned Trajectories');
 
-
-figure;
-b = bar([rmse_estimated_baseline_mean, rmse_estimated_finetuned_mean], 'BarWidth', 0.2, 'FaceColor', [0.5 0.5 0.5], 'EdgeColor', 'none');
+% Subplot 3 - Mean RMSE Comparison Bar Graph
+subplot(2, 2, 3);
+bar([rmse_estimated_baseline_mean, rmse_estimated_finetuned_mean], 'BarWidth', 0.4, 'FaceColor', [0.5 0.5 0.5], 'EdgeColor', 'none');
 hold on;
-% Add a red line connecting the tops of the bars
-x = b(1).XEndPoints + b(1).XOffset; % X positions of the bars
-y = b(1).YEndPoints; % Y positions of the tops of the bars
-plot(x, y, 'r', 'LineWidth', 2, 'LineStyle', '--'); % Plot red dashed line
+errorbar(1:2, [rmse_estimated_baseline_mean, rmse_estimated_finetuned_mean], [rmse_estimated_baseline_std, rmse_estimated_finetuned_std], '.', 'Color', 'r', 'LineWidth', 2);
+ylabel('RMSE');
 xticks(1:2);
 xticklabels({'Baseline', 'Fine-tuned'});
-ylabel('RMSE', 'FontSize', 12);
-title('Comparison of RMSE: Baseline vs. Fine-tuned Kalman Filter', 'FontSize', 14);
-set(gca, 'FontSize', 12); % Set font size for axis ticks
-legend('Estimated RMSE', 'Location', 'northwest');
-box off; % Remove box around the plot
+title('Mean RMSE Comparison');
+legend('Mean RMSE', 'Standard Deviation');
+
+% Subplot 4 - X and Y Direction Error Bar Graph
+subplot(2, 2, 4);
+bar([std_error_x_baseline, std_error_y_baseline; std_error_x, std_error_y], 'BarWidth', 0.4, 'FaceColor', [0.5 0.5 0.5]);
+hold on;
+ylabel('Standard Deviation Error');
+xticks(1:2);
+xticklabels({'Baseline', 'Fine-tuned'});
+legend({'X Direction', 'Y Direction'});
+title('X and Y Direction Error Comparison');
+
+
+sgtitle('Kalman Filter Analysis');
