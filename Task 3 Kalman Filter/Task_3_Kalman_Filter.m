@@ -35,9 +35,9 @@ for i = 1:length(x_true)
     x_est_traj_baseline(i) = x_est(1);
     y_est_traj_baseline(i) = x_est(3);
     % Calculate RMSE for Noisy Coordinate
-    errors_baseline_noisy(i) = sqrt((x_true(i) - na_noisy(i))^2 + (y_true(i) - nb_noisy(i))^2);
+    errors_baseline_noisy(i) = sqrt(mean((x_true(i) - na_noisy(i))^2 + (y_true(i) - nb_noisy(i))^2));
     % Calculate RMSE for Every coordinate
-    errors_baseline(i) = sqrt((x_true(i) - x_est_traj_baseline(i))^2 + (y_true(i) - y_est_traj_baseline(i))^2);
+    errors_baseline(i) = sqrt(mean((x_true(i) - x_est_traj_baseline(i))^2 + (y_true(i) - y_est_traj_baseline(i))^2));
 end
 % Calculate RMSE
 
@@ -91,9 +91,9 @@ for q = Q_range
             x_est_traj(i) = x_est(1);
             y_est_traj(i) = x_est(3);
             % Calculate RMSE For Noisy Coordinate
-            errors_finetune_noisy(i) = sqrt((x_true(i) - na_noisy(i))^2 + (y_true(i) - nb_noisy(i))^2);
+            errors_finetune_noisy(i) = sqrt(mean((x_true(i) - na_noisy(i))^2 + (y_true(i) - nb_noisy(i))^2));
             % Calculate RMSE For Estimated Coordinate
-            errors_finetune_estimated(i) = sqrt((x_true(i) - x_est_traj(i))^2 + (y_true(i) - y_est_traj(i))^2);
+            errors_finetune_estimated(i) = sqrt(mean((x_true(i) - x_est_traj(i))^2 + (y_true(i) - y_est_traj(i))^2));
         end
 
         % Calculate RMSE
