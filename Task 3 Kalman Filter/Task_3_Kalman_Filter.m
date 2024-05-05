@@ -18,7 +18,7 @@ P_baseline = eye(4); % Initial error covariance matrix
 x_est_traj_baseline = zeros(size(x_true));
 y_est_traj_baseline = zeros(size(y_true));
 errors_baseline = zeros(size(x_true));
-
+errors_baseline_noisy=zeros(size(x_true));
 % Kalman filter loop
 for i = 1:length(x_true)
     % Prediction step
@@ -34,6 +34,8 @@ for i = 1:length(x_true)
     % Store estimated trajectory
     x_est_traj_baseline(i) = x_est(1);
     y_est_traj_baseline(i) = x_est(3);
+    % Calculate RMSE for Noisy Coordinate
+    errors_baseline_noisy(i) = sqrt((x_true(i) - na_noisy(i))^2 + (y_true(i) - nb_noisy(i))^2);
     % Calculate RMSE for Every coordinate
     errors_baseline(i) = sqrt((x_true(i) - x_est_traj_baseline(i))^2 + (y_true(i) - y_est_traj_baseline(i))^2);
 end
@@ -42,7 +44,8 @@ end
 rmse_estimated_baseline_mean = mean(errors_baseline);
 rmse_estimated_baseline_std = std(errors_baseline);
 
-
+rmse_estimated_baseline_mean_noisy = mean(errors_baseline_noisy);
+rmse_estimated_baseline_std_noisy = std(errors_baseline_noisy);
 
 % Finetuned Kalman Filter
 % Define parameters
@@ -56,7 +59,8 @@ R_range = linspace(0.1,0.2 , 100);    % Coarse search range for R
 best_rmse = Inf; % Initialize best RMSE
 best_Q = [];
 best_R = [];
-errors_finetune = zeros(size(x_true));
+errors_finetune_estimated = zeros(size(x_true));
+errors_finetune_noisy=zeros(size(x_true));
 for q = Q_range
     for r = R_range
         % Define parameters
@@ -86,8 +90,10 @@ for q = Q_range
             % Store estimated trajectory
             x_est_traj(i) = x_est(1);
             y_est_traj(i) = x_est(3);
-            % Calculate RMSE For every Coordinate
-            errors_finetune(i) = sqrt((x_true(i) - x_est_traj(i))^2 + (y_true(i) - y_est_traj(i))^2);
+            % Calculate RMSE For Noisy Coordinate
+            errors_finetune_noisy(i) = sqrt((x_true(i) - na_noisy(i))^2 + (y_true(i) - nb_noisy(i))^2);
+            % Calculate RMSE For Estimated Coordinate
+            errors_finetune_estimated(i) = sqrt((x_true(i) - x_est_traj(i))^2 + (y_true(i) - y_est_traj(i))^2);
         end
 
         % Calculate RMSE
@@ -108,13 +114,18 @@ disp(best_Q);
 fprintf('Best Finetuned R matrix:\n');
 disp(best_R);
 
-rmse_estimated_finetuned_mean = mean(errors_finetune);
-rmse_estimated_finetuned_std = std(errors_finetune);
+rmse_estimated_finetuned_mean = mean(errors_finetune_estimated);
+rmse_estimated_finetuned_std = std(errors_finetune_estimated);
+
+rmse_estimated_finetuned_mean_noisy = mean(errors_finetune_noisy);
+rmse_estimated_finetuned_std_noisy = std(errors_finetune_noisy);
 
 std_error_x = std(x_true - x_est_traj);
 std_error_y = std(y_true - y_est_traj);
 std_error_x_baseline = std(x_true - x_est_traj_baseline );
 std_error_y_baseline = std(y_true- y_est_traj_baseline);
+fprintf('Baseline Filter RMSE in between true and Noisy coordinates Mean : %.4f, Standard Deviation: %.4f\n', rmse_estimated_baseline_mean_noisy, rmse_estimated_baseline_std_noisy);
+fprintf('Finetuned Filter RMSE in between true and Noisy coordinates Mean : %.4f, Standard Deviation: %.4f\n', rmse_estimated_finetuned_mean_noisy,rmse_estimated_finetuned_std_noisy);
 fprintf('Baseline Filter RMSE between true and estimated coordinates Mean : %.4f, Standard Deviation: %.4f\n', rmse_estimated_baseline_mean, rmse_estimated_baseline_std);
 fprintf('Finetuned Filter RMSE between true and estimated coordinates Mean : %.4f, Standard Deviation: %.4f\n', rmse_estimated_finetuned_mean,rmse_estimated_finetuned_std);
 fprintf('Baseline Kalman Filter Standard Deviation Error in X direction Error: %.4f, Y Direction Error : %.4f\n', std_error_x_baseline, std_error_y_baseline);
