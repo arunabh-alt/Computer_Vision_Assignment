@@ -17,6 +17,7 @@ P_baseline = eye(4); % Initial error covariance matrix
 % Initialize variables for storing estimated trajectory
 x_est_traj_baseline = zeros(size(x_true));
 y_est_traj_baseline = zeros(size(y_true));
+errors_baseline = zeros(size(x_true));
 
 % Kalman filter loop
 for i = 1:length(x_true)
@@ -33,10 +34,15 @@ for i = 1:length(x_true)
     % Store estimated trajectory
     x_est_traj_baseline(i) = x_est(1);
     y_est_traj_baseline(i) = x_est(3);
+    % Calculate RMSE for Every coordinate
+    errors_baseline(i) = sqrt((x_true(i) - x_est_traj_baseline(i))^2 + (y_true(i) - y_est_traj_baseline(i))^2);
 end
 % Calculate RMSE
-rmse_noisy_baseline = sqrt(mean((x_true - na_noisy).^2 + (y_true - nb_noisy).^2));
-rmse_estimated_baseline = sqrt(mean((x_true - x_est_traj_baseline).^2 + (y_true - y_est_traj_baseline).^2));
+
+rmse_estimated_baseline_mean = mean(errors_baseline);
+rmse_estimated_baseline_std = std(errors_baseline);
+
+
 
 % Finetuned Kalman Filter
 % Define parameters
@@ -50,6 +56,7 @@ R_range = linspace(0.1,0.2 , 100);    % Coarse search range for R
 best_rmse = Inf; % Initialize best RMSE
 best_Q = [];
 best_R = [];
+errors_finetune = zeros(size(x_true));
 for q = Q_range
     for r = R_range
         % Define parameters
@@ -79,6 +86,8 @@ for q = Q_range
             % Store estimated trajectory
             x_est_traj(i) = x_est(1);
             y_est_traj(i) = x_est(3);
+            % Calculate RMSE For every Coordinate
+            errors_finetune(i) = sqrt((x_true(i) - x_est_traj(i))^2 + (y_true(i) - y_est_traj(i))^2);
         end
 
         % Calculate RMSE
@@ -98,19 +107,20 @@ fprintf('Best Finetuned Q matrix:\n');
 disp(best_Q);
 fprintf('Best Finetuned R matrix:\n');
 disp(best_R);
-rmse_noisy = sqrt(mean((x_true - na_noisy).^2 + (y_true - nb_noisy).^2));
-rmse_estimated = sqrt(mean((x_true - x_est_traj).^2 + (y_true - y_est_traj).^2));
 
-std_noisy_baseline = std(sqrt((x_true - na_noisy).^2 + (y_true - nb_noisy).^2));
-std_estimated_baseline = std(sqrt((x_true - x_est_traj_baseline).^2 + (y_true - y_est_traj_baseline).^2));
-std_noisy = std(sqrt((x_true - na_noisy).^2 + (y_true - nb_noisy).^2));
-std_estimated = std(sqrt((x_true - x_est_traj).^2 + (y_true - y_est_traj).^2));
+rmse_estimated_finetuned_mean = mean(errors_finetune);
+rmse_estimated_finetuned_std = std(errors_finetune);
 
-% Print RMSE and standard deviation
-fprintf('Ground Truth RMSE between true and noisy measurements : %.4f, Standard Deviation: %.4f\n', rmse_noisy_baseline, std_noisy_baseline);
-fprintf('Ground Truth RMSE between true and estimated coordinates : %.4f, Standard Deviation: %.4f\n', rmse_estimated_baseline, std_estimated_baseline);
-fprintf('Finetuned RMSE between true and noisy measurements : %.4f, Standard Deviation: %.4f\n', rmse_noisy, std_noisy);
-fprintf('Finetuned RMSE between true and estimated coordinates : %.4f, Standard Deviation: %.4f\n', rmse_estimated, std_estimated);
+std_error_x = std(x_true - x_est_traj);
+std_error_y = std(y_true - y_est_traj);
+std_error_x_baseline = std(x_true - x_est_traj_baseline );
+std_error_y_baseline = std(y_true- y_est_traj_baseline);
+fprintf('Baseline Filter RMSE between true and estimated coordinates Mean : %.4f, Standard Deviation: %.4f\n', rmse_estimated_baseline_mean, rmse_estimated_baseline_std);
+fprintf('Finetuned Filter RMSE between true and estimated coordinates Mean : %.4f, Standard Deviation: %.4f\n', rmse_estimated_finetuned_mean,rmse_estimated_finetuned_std);
+fprintf('Baseline Kalman Filter Standard Deviation Error in X direction Error: %.4f, Y Direction Error : %.4f\n', std_error_x_baseline, std_error_y_baseline);
+fprintf('Fine Tuned Kalman Filter Standard Deviation Error in X direction Error: %.4f, Y Direction Error : %.4f\n', std_error_x, std_error_y);
+
+
 figure;
 subplot(2,1,1);
 plot(x_true, y_true, 'b', 'LineWidth', 2); hold on;
@@ -132,7 +142,7 @@ title('Finetuned Trajectories of True, Noisy, and Estimated Coordinates');
 
 
 figure;
-b = bar([rmse_estimated_baseline, rmse_estimated], 'BarWidth', 0.2, 'FaceColor', [0.5 0.5 0.5], 'EdgeColor', 'none');
+b = bar([rmse_estimated_baseline_mean, rmse_estimated_finetuned_mean], 'BarWidth', 0.2, 'FaceColor', [0.5 0.5 0.5], 'EdgeColor', 'none');
 hold on;
 % Add a red line connecting the tops of the bars
 x = b(1).XEndPoints + b(1).XOffset; % X positions of the bars
