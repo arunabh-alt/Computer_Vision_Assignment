@@ -19,25 +19,49 @@ x_est_traj_baseline = zeros(size(x_true));
 y_est_traj_baseline = zeros(size(y_true));
 errors_baseline = zeros(size(x_true));
 errors_baseline_noisy=zeros(size(x_true));
+% Define gate threshold
+threshold = 1.345977052032410e+06;
 % Kalman filter loop
 for i = 1:length(x_true)
     % Prediction step
     x_pred = F_baseline * x_est_baseline;
     P_pred = F_baseline * P_baseline * F_baseline' + Q_baseline;
     
-    % Update step
-    K = P_pred * H_baseline' * inv(H_baseline * P_pred * H_baseline' + R_baseline);
-    z = [na_noisy(i); nb_noisy(i)]; % Observation
-    x_est = x_pred + K * (z - H_baseline * x_pred);
-    P_baseline = (eye(4) - K * H_baseline) * P_pred;
+    % Calculate predicted measurement
+    z_pred = H_baseline * x_pred;
     
-    % Store estimated trajectory
-    x_est_traj_baseline(i) = x_est(1);
-    y_est_traj_baseline(i) = x_est(3);
-    % Calculate RMSE for Noisy Coordinate
-    errors_baseline_noisy(i) = sqrt(mean((x_true(i) - na_noisy(i))^2 + (y_true(i) - nb_noisy(i))^2));
-    % Calculate RMSE for Every coordinate
-    errors_baseline(i) = sqrt(mean((x_true(i) - x_est_traj_baseline(i))^2 + (y_true(i) - y_est_traj_baseline(i))^2));
+    % Calculate innovation covariance
+    S = H_baseline * P_pred * H_baseline' + R_baseline;
+    z = [na_noisy(i); nb_noisy(i)];
+    % Define Gate Logic
+    gate = (z-z_pred)'*inv(S) *(z-z_pred);
+    % Check if measurement is within validation gate
+    if gate <= threshold
+        disp('Measurement is validated By gate');
+        % Update step
+        K = P_pred * H_baseline' * inv(S);
+        x_est = x_pred + K * (z - H_baseline * x_pred);
+        P_baseline = (eye(4) - K * H_baseline) * P_pred;
+        
+        % Store estimated trajectory
+        x_est_traj_baseline(i) = x_est(1);
+        y_est_traj_baseline(i) = x_est(3);
+        %Calculate The Noisy RMSE for Every Coordinate  
+        errors_baseline_noisy(i) = sqrt(mean((x_true(i) - na_noisy(i))^2 + (y_true(i) - nb_noisy(i))^2));
+        % Calculate RMSE for Every coordinate
+        errors_baseline(i) = sqrt(mean((x_true(i) - x_est_traj_baseline(i))^2 + (y_true(i) - y_est_traj_baseline(i))^2));
+    else
+        % If measurement is outside validation gate, do not update state estimate
+        disp('Measurement is outside validation gate');
+        x_est = x_pred;
+        % Store estimated trajectory
+        x_est_traj_baseline(i) = x_est(1);
+        y_est_traj_baseline(i) = x_est(3);
+        %Calculate The Noisy RMSE for Every Coordinate  
+        errors_baseline_noisy(i) = sqrt(mean((x_true(i) - na_noisy(i))^2 + (y_true(i) - nb_noisy(i))^2));
+        % Calculate RMSE for Every coordinate without updating the state estimate
+        errors_baseline(i) = sqrt(mean((x_true(i) - x_est_traj_baseline(i))^2 + (y_true(i) - y_est_traj_baseline(i))^2));
+    end
 end
 % Calculate RMSE
 
